@@ -1,6 +1,6 @@
 # Balloon Telemetry Software
-<img src="[URL](https://github.com/Ben2260/BTD_12/blob/main/image/balloooon.png)" align="left" width="200"/>:
 
+<img src="https://github.com/Ben2260/BTD_12/blob/main/image/balloooon.png" alt="Balloon Image" align="left" width="200"/>
 
 Welcome to the Balloon Telemetry Determination Support Software repository! This project is dedicated to developing a comprehensive telemetry system for high-altitude balloon tracking missions. The following are what will be stored and what has been stored in this repository.
 
