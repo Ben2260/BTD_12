@@ -1,10 +1,13 @@
 # Balloon Telemetry Software
 
-Welcome to the Balloon Telemetry Software repository! This project is dedicated to developing a comprehensive telemetry system for high-altitude balloon missions. The system is divided into three main components:
+Welcome to the Balloon Telemetry Determination Support Software repository! This project is dedicated to developing a comprehensive telemetry system for high-altitude balloon tracking missions. The following are what will be stored and what has been stored in this repository.
 
-1. **Onboard Computer**
-2. **Server**
-3. **Ground Station**
+1. **Mechanichal Models**
+5. **Electrical Models**
+2. **On-Board Computer**
+3. **Server**
+4. **Ground Station**
+
 
 ## Project Goal
 
