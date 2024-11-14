@@ -1,4 +1,4 @@
-# B-T-D 12 Modeling and Software Repository
+# B-T-D 12 Modeling and Software
 
 <img src="https://github.com/Ben2260/BTD_12/blob/main/image/balloooon.png" alt="Balloon Image" align="right" width="200"/>
 
