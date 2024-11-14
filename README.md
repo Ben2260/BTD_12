@@ -15,6 +15,8 @@ Welcome to the Balloon Telemetry Determination Support Software repository! This
 
 The primary goal of this project is to create a robust and reliable telemetry system that can efficiently transmit data from a high-altitude balloon to a ground station via an intermediate server. This system will enable real-time monitoring and data collection during the balloon's flight.
 
+## Meet the Team:
+
 ## Repository Structure
 
 ### 1. Onboard Computer
