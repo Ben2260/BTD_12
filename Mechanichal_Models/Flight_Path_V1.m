@@ -1,4 +1,5 @@
 %% Initial constants
+%% testing
 m_tot = 7.2 + 2.2 + 0.5 + 0.2 + 2; 
 R = 8.314;                  
 G = (6.6743 * 10^-11);        
