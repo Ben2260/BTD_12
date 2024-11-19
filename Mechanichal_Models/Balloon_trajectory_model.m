@@ -9,16 +9,18 @@ GM = (6.6743*10^-11)*(5.97218*10^24);
 g= GM./(R_earth+height).^2; %gravity with respect to altitude  
 wind_vel = zeros(size(height));
 %r_max = 5.25; %bust radius of 2000g balloon [m]
+initial_r = 1.8;
 
 %max_volume = 4/3 * pi * (r_max).^3; % 2000g balloon maximum volume before burst
 [T,a,P,rho] = atmoscoesa(height); %standard atmosphere for our altitudes
-initial_vol =  4/3 * pi * (1.8)^3;
-radius = ((3/4)*(P(1)*initial_vol)./(P*pi)).^(1/3);
-volume = (4/3)*pi.*(radius).^3;
+initial_vol =  4/3 * pi * (initial_r)^3;
 R = 8.314; %gas constant
 M_Hy = 0.002; %molar mass of hydrogen
 rho_Hy = (P*M_Hy)./(R*T); %density of hydrogen at different alittudes from IGL
 gas_mass= rho_Hy(1)*initial_vol;
+radius = initial_r +((3*gas_mass*R.*T)./(4*pi.*P)).^(1/3); %((3/4)*(P(1)*initial_vol)./(P*pi)).^(1/3);
+volume = (4/3)*pi.*(radius).^3;
+
 
 %%Forces
 weight_force =(m_tot+gas_mass)*g;
@@ -45,18 +47,16 @@ plot(t,y(:,3))
 function [dydt] = flightpath_ode(t,y)
 
     % Constants:
-    initial_vol =  4/3 * pi * (1.8)^3;
-    gas_mass = 0.072888535093877*initial_vol;
     R = 8.314; %gas constant
     M_Hy = 0.002; %molar mass of hydrogen
     m_tot = 7.2 + 2.2+ 0.5 + 0.2 +2; %freshman payloads + our beacon + parachute + tether + 2000g balloon [kg];
     cd = .47; %estimated coefficient of drag of a weather balloon from google
     R_earth = 6371*1000; %radius of earth in boulder
     GM = (6.6743*10^-11)*(5.97218*10^24);
-
-
+    initial_r = 1.8;
+    initial_vol =  4/3 * pi * (initial_r)^3;
+    gas_mass = 0.072888535093877*initial_vol;
     
-
 
     % Unpack the variables
     X = y(1); % X position
@@ -68,7 +68,7 @@ function [dydt] = flightpath_ode(t,y)
 
     [T,~,P,rho] = atmoscoesa(Z); %standard atmosphere for our altitudes
     g= GM./(R_earth+Z).^2; %gravity with respect to altitude  
-    radius = ((3/4)*(P(1)*initial_vol)./(P*pi)).^(1/3);
+    radius = initial_r +((3*gas_mass*R.*T)./(4*pi.*P)).^(1/3); %((3/4)*(P(1)*initial_vol)./(P*pi)).^(1/3);
     volume = (4/3)*pi.*(radius).^3;
     rho_Hy = (P*M_Hy)./(R*T); %density of hydrogen at different alittudes from IGL
     
