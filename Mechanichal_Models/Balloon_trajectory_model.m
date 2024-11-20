@@ -1,8 +1,9 @@
 clear
 close all
 clc
+warning('off')
 
-m_tot = 7.2 + 2.2+ 0.5 + 0.2 +2; %freshman payloads + our beacon + parachute + tether + 2000g balloon [kg];
+m_tot = 3.5 + 2.2+ 0.5 + 0.1 +2; %freshman payloads + our beacon + parachute + tether + 2000g balloon [kg];
 height = 1524:32004; %altitudes in meters
 R_earth = 6371*1000; %radius of earth in boulder
 GM = (6.6743*10^-11)*(5.97218*10^24);
@@ -40,20 +41,25 @@ acceleration = [ax; ay; ascent_accel]';
 descent_rate = 4.877; %[m/s] from 12ft rocketman parachute chart
 avg_velocity = sum(velocity(1:end,3))/length(velocity_balloon);
 ascent_time = height(end)/avg_velocity;
-t = 0:10000000;
+%t = 0:10000000;
 init_cond = [0,0,height(1),0,0,0];
-[t,y] = ode45(@(t,y) flightpath_ode(t,y), [0 1000000], init_cond);   
+[t,y] = ode45(@(t,y) flightpath_ode(t,y), [0 3600], init_cond); 
+
+figure(1)
 plot(t,y(:,3))
+hold on
+plot(t(end),y(end,3), 'marker','x', 'markersize',10,'linewidth',2)
+hold off
 function [dydt] = flightpath_ode(t,y)
 
     % Constants:
     R = 8.314; %gas constant
-    M_Hy = 0.002; %molar mass of hydrogen
-    m_tot = 7.2 + 2.2+ 0.5 + 0.2 +2; %freshman payloads + our beacon + parachute + tether + 2000g balloon [kg];
+    M_Hy = 0.002; %molar mass of hydrogen per kg/mole
+    m_tot = 3.5 + 2.2+ 0.5 + 0.15 +2; %freshman payloads + our beacon + parachute + tether + 2000g balloon [kg];
     cd = .47; %estimated coefficient of drag of a weather balloon from google
     R_earth = 6371*1000; %radius of earth in boulder
     GM = (6.6743*10^-11)*(5.97218*10^24);
-    initial_r = 1.8;
+    initial_r = 1.05;
     initial_vol =  4/3 * pi * (initial_r)^3;
     gas_mass = 0.072888535093877*initial_vol;
     
@@ -68,9 +74,9 @@ function [dydt] = flightpath_ode(t,y)
 
     [T,~,P,rho] = atmoscoesa(Z); %standard atmosphere for our altitudes
     g= GM./(R_earth+Z).^2; %gravity with respect to altitude  
-    radius = initial_r +((3*gas_mass*R.*T)./(4*pi.*P)).^(1/3); %((3/4)*(P(1)*initial_vol)./(P*pi)).^(1/3);
+    radius = initial_r +((3*gas_mass*R.*T)./(4*pi*M_Hy.*P)).^(1/3);
     volume = (4/3)*pi.*(radius).^3;
-    rho_Hy = (P*M_Hy)./(R*T); %density of hydrogen at different alittudes from IGL
+    rho_Hy = (P*gas_mass)./(R*T); %density of hydrogen at different alittudes from IGL
     
     % Forces
     weight_force =(m_tot+gas_mass)*g;
