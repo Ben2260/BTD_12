@@ -3,8 +3,13 @@ close all
 clc
 warning('off')
 
+%%Ascent
 init_cond = [0,0,height(1),0,0,0];
 [t,y] = ode45(@(t,y) flightpath_ode(t,y), [0 3600], init_cond); 
+
+%%Descent
+
+%%Freefall
 
 figure(1)
 plot(t,y(:,3))
