@@ -5,7 +5,7 @@ warning('off')
 
 %%Ascent
 init_cond = [0,0,1587,0,0,0];
-[t,y] = ode45(@(t,y) flightpath_ode(t,y), [0 3600], init_cond); 
+[t,y] = ode45(@(t,y) flightpath_ode(t,y), [0 4000], init_cond); 
 
 %%Descent
 
