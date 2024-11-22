@@ -39,7 +39,7 @@ function [dydt] = flightpath_ode(t,y)
     vZ = y(6); % Z velocity
 
     [T,~,P,rho] = atmoscoesa(Z); %standard atmosphere for our altitudes
-    g= 9.81*(1-(2*Z/R_earth);   %GM./(R_earth+Z).^2; %gravity with respect to altitude  
+    g= GM./(R_earth+Z).^2; %gravity with respect to altitude  
     radius = initial_r +((3*gas_mass*R.*T)./(4*pi*M_Hy.*P)).^(1/3);
     volume = (4/3)*pi.*(radius).^3;
     rho_Hy = (P*gas_mass)./(R*T); %density of hydrogen at different alittudes from IGL
