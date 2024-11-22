@@ -43,7 +43,7 @@ function [dydt] = flightpath_ode(t,y)
                                      % we nolonger need anything but the air
                                      % density at those heights
         
-         g = 9.81*(1-(2*Z)/R_earth); %gravity with respect to altitude  
+         g = GM/((R_earth+Z).^2); %gravity with respect to altitude  
         
         % Forces
         weight_force =(m_tot)*g;
