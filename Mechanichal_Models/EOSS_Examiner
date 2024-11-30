@@ -1,0 +1,79 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+# Expected Columns from past EOSS data sets
+expect_col = ['Time', 'Fix', 'Sats', 'Flags', 'Baro Pressure', 'Baro altitude',
+       'GPS altitude', 'Speed (MPH)', 'Heading', 'Horiz accuracy',
+       'Vertical accuracy', 'pDOP', 'Latitude', 'Longitude', 'Int_Temp F',
+       'battery_v']
+
+# Extract data from avaliable sources
+data_directory = os.path.abspath('EOSS_Data/EOSS_CSV')
+
+# List to hold DataFrames
+RAW_data = []
+CLEAN_data = []
+
+try:
+    for filename in os.listdir(data_directory):
+        if filename.startswith('EOSS_04') and filename.endswith('.csv'):
+            filepath = os.path.join(data_directory, filename)
+            df = pd.read_csv(filepath, dtype={'Column_name': str}, low_memory=False)
+            df.replace('#NAME?', np.nan, inplace=True)
+            try:
+                df['Time'] = pd.to_datetime(df['Time'], format='%H:%M:%S', errors='coerce')
+            except:
+                df['Time (UTC)'] = pd.to_datetime(df['Time (UTC)'], format='%H:%M:%S', errors='coerce')
+            df.dropna(inplace=True)
+            RAW_data.append(df)
+except Exception as E:
+    print(f"An error has occured \nERROR TYPE\n{E}")
+temp = RAW_data[2]
+print(temp.columns)
+for RAW_frame in RAW_data:
+    hold = RAW_frame.copy()
+    
+    # Lovely Columns:
+    hold['Speed (MPH)'] = hold['Speed (MPH)'].astype(float)
+
+    # Troublesome columns:
+    try:
+        hold["Baro altitude"] = hold["Baro altitude"].astype(float)
+    except:
+        hold["Baro altitude"] = hold["Baro altitude Ft"].astype(float)
+        hold.drop(columns=["Baro altitude Ft"], inplace=True)
+        
+    try:
+        hold["Heading"] = hold["Heading"].astype(float)
+    except:
+        hold["Heading"] = hold["Heading Degrees"].astype(float)
+        hold.drop(columns=["Heading Degrees"], inplace=True)
+        
+    try:
+        hold['Time'] = pd.to_datetime(hold['Time'], format='%H:%M:%S')
+    except:
+        hold['Time'] = pd.to_datetime(hold["Time (UTC)"], format='%H:%M:%S')
+        hold.drop(columns=["Time (UTC)"], inplace=True)
+    
+    # Interpreted Columns:
+    hold = hold[hold['Speed (MPH)'] != 0]
+    d_alt = hold['Baro altitude'].diff()# diff in feet, difrence between points is always 1 second
+    d_time['hold'] = hold['Time'].dt.hour * 3600 + hold['Time'].dt.minute * 60 + hold['Time'].dt.second
+    d_time = d_time['hold'].diff()
+    hold["Vertical Speed"] = (d_alt/d_time)*0.68181818
+    CLEAN_data.append(hold)
+
+# Clean
+review = CLEAN_data[1]
+review = review.iloc[3:]
+plt.plot(review['Time'],review['Vertical Speed'] )
+
+# Add title and labels
+plt.title('Comparison of Heights and Temperatures')
+plt.xlabel('Temperature (°C)')
+plt.ylabel('Height (cm)')
+
+# Show plot
+plt.show()
