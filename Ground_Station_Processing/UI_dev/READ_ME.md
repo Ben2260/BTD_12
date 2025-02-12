@@ -6,9 +6,9 @@ Naming Convention
 Prefix terminology:\
 T:  Terminate\
 IT: Imadiate Termination\
-FP: Flight Path\
+FP: Flight Path
 
 Post Prefix Terminology:\
 B: Button\
 C: Count down\
-F: Function\
+F: Function
