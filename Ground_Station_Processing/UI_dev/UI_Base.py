@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QFrame
 from PyQt6.QtCore import QTimer
 import sys
-
+ 
 # Function to be executed when the Terminate button is clicked
 def Temp_Terminate():
     """
