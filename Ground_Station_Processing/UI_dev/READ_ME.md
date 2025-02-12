@@ -4,7 +4,7 @@ Naming Convention
 3) what more minute detal does this code adress.
 
 Prefix terminology:
-T:  Terminate
+\n T:  Terminate
 IT: Imadiate Termination
 FP: Flight Path
 
